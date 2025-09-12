@@ -59,16 +59,16 @@ Format the response using this JSON schema:
   "type": "object",
   "properties": {
     "customername": { "type": "string" },
-    "customerEmail": { "type": "string" },
-    "customerPhone": { "type": "string" },
-    "customerIndustry": { "type": "string" },
+    "customeremail": { "type": "string" },
+    "customerphone": { "type": "string" },
+    "customerindustry": { "type": "string" },
     "customerproblem": { "type": "string" },
-    "customerAvailability": { "type": "string" },
-    "customerConsultation": { "type": "boolean" },
+    "customeravailability": { "type": "string" },
+    "customerconsultation": { "type": "boolean" },
     "specialnotes": { "type": "string" },
     "leadquality": { "type": "string", "enum": ["good", "ok", "spam"] }
   },
-  "required": ["customername", "customerEmail", "customerproblem", "leadquality"]
+  "required": ["customername", "customeremail", "customerproblem", "leadquality"]
 }
 
 ⚠️ Rule: If the user provided contact details (email/phone), set leadquality = "good". Otherwise = "spam".
