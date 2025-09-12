@@ -12,6 +12,16 @@ const client = new OpenAI({
 });
 
 export default async function handler(req, res) {
+  // === CORS ===
+  res.setHeader("Access-Control-Allow-Origin", "*"); // hoặc thay bằng domain của bạn
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Preflight request
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -20,6 +30,7 @@ export default async function handler(req, res) {
     const { message, conservation_id } = req.body;
     if (!message) return res.status(400).json({ error: "Thiếu message" });
 
+    // Gọi OpenAI
     const completion = await client.chat.completions.create({
       model: "gpt-4.1-nano",
       messages: [{ role: "user", content: message }],
@@ -31,6 +42,7 @@ export default async function handler(req, res) {
     let convId = conservation_id;
 
     if (!convId) {
+      // Tạo conversation mới
       convId = crypto.randomUUID();
       const { error } = await supabase.from("Conservations").insert([
         {
@@ -45,6 +57,7 @@ export default async function handler(req, res) {
       ]);
       if (error) throw error;
     } else {
+      // Cập nhật conversation hiện có
       const { data, error } = await supabase
         .from("Conservations")
         .select("messages")
@@ -67,7 +80,7 @@ export default async function handler(req, res) {
       if (updateError) throw updateError;
     }
 
-    res.json({ reply, conservation_id: convId });
+    res.status(200).json({ reply, conservation_id: convId });
   } catch (err) {
     console.error("❌ Error:", err);
     res.status(500).json({ error: "Có lỗi xảy ra" });
