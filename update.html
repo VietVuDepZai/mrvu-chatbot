@@ -72,7 +72,7 @@
     const id = params.get("id");
 
     async function loadConversation() {
-      const res = await fetch(`http://localhost:5000/conversations/${id}`);
+      const res = await fetch(`/conversations/${id}`);
       const conv = await res.json();
 
       if (conv) {
@@ -85,7 +85,7 @@
       e.preventDefault();
       const messages = document.getElementById("messages").value;
 
-      await fetch(`http://localhost:5000/conversations/${id}`, {
+      await fetch(`/conversations/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: JSON.parse(messages) })
