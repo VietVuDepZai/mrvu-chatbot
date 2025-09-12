@@ -63,7 +63,7 @@
     }
 
     async function confirmDelete() {
-      await fetch(`/api/conversations-${id}`, {
+      await fetch(`/api/conversations/${id}`, {
         method: "DELETE"
       });
       alert("🗑 Đã xóa!");

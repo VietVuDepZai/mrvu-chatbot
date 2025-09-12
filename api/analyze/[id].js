@@ -91,6 +91,6 @@ Format the response using this JSON schema:
     res.status(200).json(analysis);
   } catch (err) {
     console.error("❌ Error:", err);
-    res.status(500).json({ error: "Không phân tích được" });
+    res.status(500).json({ error: err });
   }
 }
