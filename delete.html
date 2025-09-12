@@ -63,7 +63,7 @@
     }
 
     async function confirmDelete() {
-      await fetch(`http://localhost:5000/conversations/${id}`, {
+      await fetch(`https://mrvu-chatbot.vercel.app/api/conversations/${id}`, {
         method: "DELETE"
       });
       alert("🗑 Đã xóa!");

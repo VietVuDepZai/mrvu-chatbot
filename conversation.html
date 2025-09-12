@@ -106,7 +106,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get("id");
 
-      const res = await fetch(`http://localhost:5000/conversations/${id}`);
+      const res = await fetch(`https://mrvu-chatbot.vercel.app/api/conversations/${id}`);
       const data = await res.json();
 
       const chat = document.getElementById("chat");
