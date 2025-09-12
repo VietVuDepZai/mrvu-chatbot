@@ -41,7 +41,39 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "system",
-          content: `Extract customer info from the conversation and format as JSON.`,
+          content: `
+${`
+Extract the following customer details from the transcript:
+- Name
+- Email address
+- Phone number
+- Industry
+- Problems, needs, and goals summary
+- Availability
+- Whether they have booked a consultation (true/false)
+- Any special notes
+- Lead quality (categorize as 'good', 'ok', or 'spam')
+
+Format the response using this JSON schema:
+{
+  "type": "object",
+  "properties": {
+    "customername": { "type": "string" },
+    "customerEmail": { "type": "string" },
+    "customerPhone": { "type": "string" },
+    "customerIndustry": { "type": "string" },
+    "customerproblem": { "type": "string" },
+    "customerAvailability": { "type": "string" },
+    "customerConsultation": { "type": "boolean" },
+    "specialnotes": { "type": "string" },
+    "leadquality": { "type": "string", "enum": ["good", "ok", "spam"] }
+  },
+  "required": ["customername", "customerEmail", "customerproblem", "leadquality"]
+}
+
+⚠️ Rule: If the user provided contact details (email/phone), set leadquality = "good". Otherwise = "spam".
+`}
+          `,
         },
         { role: "user", content: transcript },
       ],
