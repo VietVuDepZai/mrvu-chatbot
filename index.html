@@ -134,7 +134,7 @@
 
   <script>
     async function loadConversations() {
-      const res = await fetch("https://mrvu-chatbot.vercel.app/api/conversations");
+      const res = await fetch("/api/conversations");
       const data = await res.json();
       const list = document.getElementById("list");
       list.innerHTML = "";
@@ -167,7 +167,7 @@
           analysisBox.style.display = "block";
           analysisBox.innerHTML = "⏳ Đang phân tích...";
           try {
-            const res = await fetch(`https://mrvu-chatbot.vercel.app/api/analyze/${conv.conservation_id}`, { method: "POST" });
+            const res = await fetch(`/api/analyze/${conv.conservation_id}`, { method: "POST" });
             const result = await res.json();
             analysisBox.innerHTML = `
               <b>👤 Name:</b> ${result.customername || "-"}<br>
@@ -195,7 +195,7 @@
         div.querySelector(".btn-delete").onclick = async (e) => {
           e.stopPropagation();
           if (confirm("Bạn có chắc muốn xóa cuộc trò chuyện này?")) {
-            await fetch(`https://mrvu-chatbot.vercel.app/api/conversations/${conv.conservation_id}`, { method: "DELETE" });
+            await fetch(`/api/conversations/${conv.conservation_id}`, { method: "DELETE" });
             div.remove();
           }
         };
