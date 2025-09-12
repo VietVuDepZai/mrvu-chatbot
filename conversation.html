@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết cuộc trò chuyện</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0;
+      color: #333;
+      font-size: 22px;
+    }
+    .back-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: #0056b3;
+    }
+    .chat-box {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      overflow-y: auto;
+    }
+    .message {
+      display: flex;
+      align-items: flex-end;
+      margin: 12px 0;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .avatar {
+      font-size: 22px;
+      margin: 0 10px;
+      flex-shrink: 0;
+    }
+    .bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      font-size: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .user {
+      flex-direction: row-reverse;
+    }
+    .user .bubble {
+      background: #007bff;
+      color: #fff;
+      border-bottom-right-radius: 6px;
+    }
+    .assistant .bubble {
+      background: #e9ecef;
+      color: #000;
+      border-bottom-left-radius: 6px;
+    }
+    .chat-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-box::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 10px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💬 Chi tiết cuộc trò chuyện</h1>
+    <a href="dashboard.html" class="back-btn">⬅️ Quay lại Dashboard</a>
+  </header>
+
+  <div id="chat" class="chat-box"></div>
+
+  <script>
+    async function loadConversation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+
+      const res = await fetch(`http://localhost:5000/conversations/${id}`);
+      const data = await res.json();
+
+      const chat = document.getElementById("chat");
+      chat.innerHTML = "";
+
+      if (!data.messages) {
+        chat.innerHTML = "<p>⚠️ Không tìm thấy hội thoại.</p>";
+        return;
+      }
+
+      data.messages.forEach(msg => {
+        if (msg.role === "system") return; // ẩn system
+
+        const div = document.createElement("div");
+        div.className = `message ${msg.role}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = msg.role === "user" ? "🧑" : "🤖";
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = msg.content;
+
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+        chat.appendChild(div);
+      });
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    loadConversation();
+  </script>
+</body>
+</html>

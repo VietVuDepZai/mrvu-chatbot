@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>🗑 Delete Conversation</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #FF9A9E, #fecfef);
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .confirm-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px;
+    }
+    .btn-cancel {
+      background: #ccc;
+      color: #333;
+    }
+    .btn-delete {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-delete:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="confirm-box">
+    <h1>⚠️ Xóa hội thoại</h1>
+    <p>Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?</p>
+    <button class="btn btn-cancel" onclick="cancelDelete()">❌ Hủy</button>
+    <button class="btn btn-delete" onclick="confirmDelete()">🗑 Xóa</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    function cancelDelete() {
+      window.location.href = "index.html";
+    }
+
+    async function confirmDelete() {
+      await fetch(`http://localhost:5000/conversations/${id}`, {
+        method: "DELETE"
+      });
+      alert("🗑 Đã xóa!");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

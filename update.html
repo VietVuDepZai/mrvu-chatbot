@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>✏️ Update Conversation</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #FBD786, #f7797d);
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .form-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      width: 500px;
+    }
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #357ABD;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h1>✏️ Cập nhật hội thoại</h1>
+    <form id="updateForm">
+      <label for="title">Tiêu đề</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="messages">Nội dung</label>
+      <textarea id="messages" name="messages" rows="6" required></textarea>
+
+      <button type="submit">💾 Lưu thay đổi</button>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function loadConversation() {
+      const res = await fetch(`http://localhost:5000/conversations/${id}`);
+      const conv = await res.json();
+
+      if (conv) {
+        document.getElementById("title").value = "Cuộc trò chuyện";
+        document.getElementById("messages").value = JSON.stringify(conv.messages, null, 2);
+      }
+    }
+
+    document.getElementById("updateForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const messages = document.getElementById("messages").value;
+
+      await fetch(`http://localhost:5000/conversations/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: JSON.parse(messages) })
+      });
+
+      alert("✅ Cập nhật thành công!");
+      window.location.href = "index.html";
+    };
+
+    loadConversation();
+  </script>
+</body>
+</html>
