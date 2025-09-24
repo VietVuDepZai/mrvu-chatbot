@@ -130,54 +130,60 @@
     <button id="send">Gửi</button>
     <button id="newChat">Tạo trò chuyện mới</button>
   </div>
+<script>
+  let conservation_id = null;
 
-  <script>
-    let conservation_id = null;
+  function appendMessage(role, text) {
+    const chat = document.getElementById("chat");
+    const div = document.createElement("div");
+    div.className = `message ${role}`;
+    div.textContent = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
 
-    function appendMessage(role, text) {
-      const chat = document.getElementById("chat");
-      const div = document.createElement("div");
-      div.className = `message ${role}`;
-      div.textContent = text;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
+  async function sendMessage() {
+    const msgInput = document.getElementById("message");
+    const msg = msgInput.value.trim();
+    if (!msg) return;
+
+    appendMessage("user", msg);
+    msgInput.value = "";
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, conservation_id })
+      });
+
+      const data = await res.json();
+      appendMessage("assistant", data.reply);
+
+      if (!conservation_id) conservation_id = data.conservation_id;
+    } catch (err) {
+      appendMessage("assistant", "⚠️ Lỗi kết nối server.");
+      console.error(err);
     }
+  }
 
-    async function sendMessage() {
-      const msgInput = document.getElementById("message");
-      const msg = msgInput.value.trim();
-      if (!msg) return;
+  document.getElementById("send").addEventListener("click", sendMessage);
+  document.getElementById("message").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
 
-      appendMessage("user", msg);
-      msgInput.value = "";
+  document.getElementById("newChat").addEventListener("click", () => {
+    conservation_id = null;
+    document.getElementById("chat").innerHTML = "";
+    appendMessage("assistant", "🆕 Bắt đầu cuộc trò chuyện mới.");
+    appendMessage("assistant", "Xin chào 👋! Tôi là Mr.Vũ Chatbot. Anh/chị muốn tìm mẫu quạt trần theo phong cách nào (hiện đại, cổ điển, tối giản, hay theo nhu cầu sử dụng)?");
+  });
 
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg, conservation_id })
-        });
+  // 👇 Gửi lời chào ngay khi load trang
+  window.onload = () => {
+    appendMessage("assistant", "Xin chào 👋! Tôi là Mr.Vũ Chatbot. Anh/chị muốn tìm mẫu quạt trần theo phong cách nào (hiện đại, cổ điển, tối giản, hay theo nhu cầu sử dụng)?");
+  };
+</script>
 
-        const data = await res.json();
-        appendMessage("assistant", data.reply);
-
-        if (!conservation_id) conservation_id = data.conservation_id;
-      } catch (err) {
-        appendMessage("assistant", "⚠️ Lỗi kết nối server.");
-        console.error(err);
-      }
-    }
-
-    document.getElementById("send").addEventListener("click", sendMessage);
-    document.getElementById("message").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
-    });
-
-    document.getElementById("newChat").addEventListener("click", () => {
-      conservation_id = null;
-      document.getElementById("chat").innerHTML = "";
-      appendMessage("assistant", "🆕 Bắt đầu cuộc trò chuyện mới.");
-    });
-  </script>
 </body>
 </html>
