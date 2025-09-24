@@ -111,6 +111,8 @@ Bạn đang tư vấn để khách chọn một tác phẩm nghệ thuật, nân
             { role: "user", content: message },
             { role: "assistant", content: reply },
           ],
+          temperature: 0.6,
+          max_tokens: 250
         },
       ]);
       if (error) throw error;
