@@ -70,8 +70,6 @@ Your goal is to guide users through a structured discovery conversation to under
             { role: "user", content: message },
             { role: "assistant", content: reply },
           ],
-          temperature: 0.6,
-          max_tokens: 250
         },
       ]);
       if (error) throw error;
