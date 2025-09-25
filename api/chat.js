@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
     // Gọi OpenAI
     const completion = await client.chat.completions.create({
-      model: "gpt-4.1-nano",
+      model: "gpt-4.1",
       messages: [{ role: "user", content: message }],
     });
 
