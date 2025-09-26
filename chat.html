@@ -171,18 +171,23 @@
   document.getElementById("message").addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
   });
-
   document.getElementById("newChat").addEventListener("click", () => {
+    // Reset toàn bộ cuộc trò chuyện
     conservation_id = null;
     document.getElementById("chat").innerHTML = "";
-    appendMessage("assistant", "🆕 Bắt đầu cuộc trò chuyện mới.");
-    appendMessage("assistant", "Xin chào 👋! Tôi là Mr.Vũ Chatbot. Anh/chị muốn tìm mẫu quạt trần theo phong cách nào (hiện đại, cổ điển, tối giản, hay theo nhu cầu sử dụng)?");
+
+    // Lời chào đầu tiên khi bắt đầu hội thoại mới
+    appendMessage("assistant", "🆕 Cuộc trò chuyện mới đã được bắt đầu.");
+    appendMessage("assistant", "Xin chào 👋! Tôi là Mr.Vũ Chatbot – trợ lý ảo của Quạt trần cao cấp Mr.Vũ.");
+    appendMessage("assistant", "Anh/chị muốn mình gợi ý quạt trần theo **phong cách** (hiện đại, cổ điển, độc lạ, đèn chùm…) hay theo **nhu cầu sử dụng** (phòng khách, phòng ngủ, bếp…)?");
   });
 
-  // 👇 Gửi lời chào ngay khi load trang
+  // 👇 Gửi lời chào khi load trang lần đầu
   window.onload = () => {
-    appendMessage("assistant", "Xin chào 👋! Đây là Chatbot của Quạt Mr.Vũ. Anh/chị muốn mình gợi ý quạt trần theo **phong cách** (hiện đại, cổ điển, độc lạ…) hay theo **nhu cầu sử dụng** trước ạ?");
+    appendMessage("assistant", "Xin chào 👋! Đây là Chatbot của Quạt trần Mr.Vũ.");
+    appendMessage("assistant", "Anh/chị muốn mình gợi ý quạt theo **phong cách** (hiện đại, cổ điển, độc lạ…) hay theo **nhu cầu sử dụng** trước ạ?");
   };
+
 
 </script>
 
